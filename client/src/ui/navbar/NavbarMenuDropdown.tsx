@@ -2,13 +2,14 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
-import { Typography, Tooltip } from "@mui/material";
+import { Typography, Tooltip, ListItemIcon, ListItemText } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faRightFromBracket,
   faUser,
   faChevronDown,
   faChevronUp,
+  faHeadset,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { CurrentProfileAvatar } from "./CurrentProfileAvatar";
@@ -111,10 +112,28 @@ export function NavbarMenuDropdown() {
             pushToProfile();
           }}
         >
-          <Typography variant="body1">
-            <FontAwesomeIcon icon={faUser} style={{ marginRight: "8px" }} />
-            Profile
-          </Typography>
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faUser} style={{ color: "#3C435C" }} />
+          </ListItemIcon>
+
+          <ListItemText>
+            <Typography variant="body1">Profile</Typography>
+          </ListItemText>
+        </MenuItem>
+
+        {/* Support */}
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleLogout();
+          }}
+        >
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faHeadset} style={{ color: "#3C435C" }} />
+          </ListItemIcon>
+          <ListItemText>
+            <Typography variant="body1">Support</Typography>
+          </ListItemText>
         </MenuItem>
 
         {/* Logout menu item. onclick function include closing the menu "note may not be necessary" and a function to handle the logout logic */}
@@ -124,13 +143,16 @@ export function NavbarMenuDropdown() {
             handleLogout();
           }}
         >
-          <Typography variant="body1">
+          <ListItemIcon>
             <FontAwesomeIcon
               icon={faRightFromBracket}
-              style={{ marginRight: "5px" }}
+              style={{ color: "#3C435C" }}
             />
-            Logout
-          </Typography>
+          </ListItemIcon>
+
+          <ListItemText>
+            <Typography variant="body1">Logout</Typography>
+          </ListItemText>
         </MenuItem>
       </Menu>
     </div>
