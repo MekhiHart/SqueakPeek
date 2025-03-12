@@ -123,21 +123,6 @@ export function NavbarMenuDropdown() {
           </ListItemText>
         </MenuItem>
 
-        {/* Support */}
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            renderInterstitial("SupportModal");
-          }}
-        >
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faHeadset} style={{ color: "#3C435C" }} />
-          </ListItemIcon>
-          <ListItemText>
-            <Typography variant="body1">Support</Typography>
-          </ListItemText>
-        </MenuItem>
-
         {/* Logout menu item. onclick function include closing the menu "note may not be necessary" and a function to handle the logout logic */}
         <MenuItem
           onClick={() => {

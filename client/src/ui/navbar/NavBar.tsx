@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Typography } from "@mui/material";
+import { IconButton, Tooltip, Typography } from "@mui/material";
 import { usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,10 +8,12 @@ import {
   faChartLine,
   faMagnifyingGlass,
   IconDefinition,
+  faHeadset,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavbarMenuDropdown } from "./NavbarMenuDropdown";
 import { LogoNameLink } from "./LogoNameLink";
 import { useMessageNotification } from "@/lib/store/messageNotification";
+import { useInterstitial } from "@/lib/store/interstitial";
 
 interface ILinks {
   name: string;
@@ -41,6 +43,7 @@ export function NavBar() {
   const numPrivateNotifications = privateNotifications.filter(
     (notification) => notification.isRead === false
   ).length;
+  const { renderInterstitial } = useInterstitial();
   return (
     // Navbar container
     <nav
@@ -140,8 +143,30 @@ export function NavBar() {
       </div>
 
       {/* Dropdown Section */}
-
-      <NavbarMenuDropdown />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Tooltip
+          sx={{
+            marginRight: "10px",
+          }}
+          title="Support"
+          onClick={() => renderInterstitial("SupportModal")}
+        >
+          <IconButton>
+            <FontAwesomeIcon
+              style={{
+                color: "#3C435C",
+              }}
+              icon={faHeadset}
+            />
+          </IconButton>
+        </Tooltip>
+        <NavbarMenuDropdown />
+      </div>
     </nav>
   );
 }
