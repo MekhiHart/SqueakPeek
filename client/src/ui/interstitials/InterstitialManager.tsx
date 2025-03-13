@@ -2,13 +2,14 @@
 
 import { SupportModal } from "./SupportModal";
 import { useInterstitial, Interstitial } from "@/lib/store/interstitial";
-import { Modal, Box } from "@mui/material";
+import { Dialog } from "@mui/material";
+
 export function InterstitialManager() {
   const { currentInterstitial, closeInterstitial } = useInterstitial();
 
   if (currentInterstitial) {
     return (
-      <Modal
+      <Dialog
         open={currentInterstitial !== null}
         onClose={closeInterstitial}
         sx={{
@@ -18,10 +19,8 @@ export function InterstitialManager() {
         }}
       >
         <InterstitialContent interstitial={currentInterstitial} />
-      </Modal>
+      </Dialog>
     );
-  } else {
-    return null;
   }
 }
 
@@ -33,5 +32,7 @@ const InterstitialContent = ({
   switch (interstitial) {
     case "SupportModal":
       return <SupportModal />;
+    default:
+      return null;
   }
 };
