@@ -49,7 +49,7 @@ export default function Page() {
       name: "Noah Daniels",
       role: "Backend",
       description:
-        "Noah Daniels is a software developer, data analyst, and machine learning engineer, using his passion for mathematics and music alongside a strong work ethic to achieve his aims in a broad range of sciences and life goals.",
+        "Noah Daniels is a software developer, data analyst, and machine learning engineer, with a passion for mathematics and music.",
       linkedInURl: "https://www.linkedin.com/in/noah-daniels-07b5401a9/",
       profilePic: "/about/profilepic_noah.png",
     },
