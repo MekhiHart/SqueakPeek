@@ -14,8 +14,7 @@ export function InterstitialManager() {
         onClose={closeInterstitial}
         sx={{
           alignItems: "center",
-          justifyContent: "center",
-          display: "flex",
+          // display: "flex",
         }}
       >
         <InterstitialContent interstitial={currentInterstitial} />

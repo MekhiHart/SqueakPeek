@@ -7,16 +7,12 @@ const zodIssueType = z.enum(["Bug", "Feedback", "Feature Request"]);
 // derives JiraIssue type
 export type IssueType = z.infer<typeof zodIssueType>;
 
-interface JiraTicket {
-  summary: string;
-  description: string;
-  issueType: IssueType;
-}
-
 // Login zod schema
 const JiraTicketFormSchema = z.object({
-  summary: z.string().min(8),
-  description: z.string().min(8),
+  summary: z.string().min(8, "Summary must be more than 8 characters"),
+  description: z
+    .string()
+    .min(8, "Description must be longer than 8 characters"),
   issueType: zodIssueType,
 });
 

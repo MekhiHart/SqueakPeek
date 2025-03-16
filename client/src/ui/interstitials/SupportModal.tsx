@@ -1,5 +1,14 @@
 import Image from "next/image";
-import { Typography, Box, Select, MenuItem, Button } from "@mui/material";
+import {
+  Typography,
+  Select,
+  MenuItem,
+  Button,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  DialogContentText,
+} from "@mui/material";
 import { InputField } from "../InputField";
 import {
   JiraTicketFormState,
@@ -45,14 +54,8 @@ export function SupportModal() {
   }, [state]);
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "white",
-        borderRadius: "8px",
-        justifyContent: "center",
-      }}
-    >
-      <form action={formAction}>
+    <form action={formAction}>
+      <DialogTitle>
         <Image
           src="/general/website_logo.svg"
           height={100}
@@ -60,20 +63,28 @@ export function SupportModal() {
           alt="Squeakpeek Logo"
           style={{}}
         />
-        <Typography
+        <Typography variant="h4">Support</Typography>
+      </DialogTitle>
+
+      <DialogContent>
+        <DialogContentText
           sx={{
             paddingBottom: "16px",
           }}
-          variant="h3"
         >
-          Support
-        </Typography>
+          Send support tickets to the SqueakPeek developers about bugs, feature
+          requests, or encouraging feedback!
+        </DialogContentText>
         <InputField
           label="Summary"
           required
           name="summary"
           placeholder="Summary"
           helperText={state.errors?.summary}
+          fullWidth
+          sx={{
+            paddingBottom: "16px",
+          }}
         />
         <InputField
           label="Description"
@@ -81,6 +92,13 @@ export function SupportModal() {
           name="description"
           placeholder="Description"
           helperText={state.errors?.description}
+          multiline
+          rows={5}
+          maxRows={5}
+          fullWidth
+          sx={{
+            paddingBottom: "16px",
+          }}
         />
         <Select
           name="issueType"
@@ -88,6 +106,7 @@ export function SupportModal() {
           label="issueType"
           title="Options"
           required
+          fullWidth
         >
           <MenuItem onClick={() => setIssueType("Bug")} value="Bug">
             Bug
@@ -104,7 +123,27 @@ export function SupportModal() {
         </Select>
 
         <FormHelperText>{state.errors?.issueType}</FormHelperText>
+      </DialogContent>
 
+      <DialogActions>
+        <Button
+          onClick={closeInterstitial}
+          className="borderline"
+          variant="contained"
+          color="primary"
+          sx={{
+            mt: 2,
+            width: "200px",
+            boxShadow: "none",
+            backgroundColor: "#496FFF",
+            ":hover": {
+              backgroundColor: "#3B5AC6",
+              boxShadow: "none",
+            },
+          }}
+        >
+          Cancel
+        </Button>
         <Button
           className="borderline"
           type="submit"
@@ -123,7 +162,7 @@ export function SupportModal() {
         >
           Confirm
         </Button>
-      </form>
-    </Box>
+      </DialogActions>
+    </form>
   );
 }
