@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContentText,
+  InputLabel,
 } from "@mui/material";
 import { InputField } from "../InputField";
 import {
@@ -100,6 +101,25 @@ export function SupportModal() {
             paddingBottom: "16px",
           }}
         />
+
+        <InputLabel
+          style={{
+            textAlign: "start",
+            fontWeight: "bold",
+            display: "flex",
+          }}
+        >
+          Issue Type
+          <span
+            style={{
+              paddingLeft: "5px",
+              color: "red",
+            }}
+          >
+            *
+          </span>
+        </InputLabel>
+
         <Select
           name="issueType"
           value={issueType}
