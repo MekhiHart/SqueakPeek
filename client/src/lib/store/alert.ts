@@ -1,8 +1,10 @@
 import { create } from "zustand";
-import { AlertColor } from "@mui/material";
+import { AlertColor, SnackbarProps } from "@mui/material";
+import {} from "@mui/material";
 interface Alert {
   message: string;
   type: AlertColor;
+  position?: SnackbarProps["anchorOrigin"];
 }
 
 // state of the hook

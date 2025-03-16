@@ -24,7 +24,6 @@ export async function loginAccount(
   prevState: LoginState,
   formData: FormData
 ): Promise<LoginState> {
-
   // safeParse to async. get validated fields
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
@@ -33,7 +32,6 @@ export async function loginAccount(
 
   // form validation fails
   if (!validatedFields.success) {
-    
     // add error meesages
     return {
       errors: validatedFields.error.flatten().fieldErrors, // returns error for each field
