@@ -48,6 +48,8 @@ export async function sendTicket(
 
   const { summary, description, issueType } = validatedFields.data;
 
+
+  // env variables
   const apiToken = process.env.JIRA_API_KEY!;
   const jiraLink = process.env.JIRA_LINK!;
 
