@@ -13,7 +13,9 @@ export function AlertToast() {
       open={isOpen}
       autoHideDuration={3000}
       onClose={handleClose}
-      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      anchorOrigin={
+        alert?.position ?? { horizontal: "right", vertical: "bottom" }
+      }
     >
       <Alert severity={alert?.type} variant="filled" sx={{ width: "100%" }}>
         {alert?.message}

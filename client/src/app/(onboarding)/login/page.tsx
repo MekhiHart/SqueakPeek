@@ -14,14 +14,19 @@ export default function Page() {
   return (
     <div className="main-container">
       {/* Welcome Back section */}
-      <Typography variant="h4" sx={{ marginBottom: "20px", marginTop: "110px" }}>
+      <Typography
+        variant="h4"
+        sx={{ marginBottom: "20px", marginTop: "110px" }}
+      >
         Welcome Back
       </Typography>
 
       {/* Sign in with Google Button */}
       <Button
         className="borderline"
-        startIcon={<img src="https://www.google.com/favicon.ico" alt="Google" />}
+        startIcon={
+          <img src="https://www.google.com/favicon.ico" alt="Google" />
+        }
         sx={{
           border: "4px solid #E0E4F2",
           backgroundColor: "white",
