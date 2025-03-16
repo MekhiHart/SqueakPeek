@@ -48,10 +48,9 @@ export async function sendTicket(
 
   const { summary, description, issueType } = validatedFields.data;
 
-
   // env variables
   const apiToken = process.env.JIRA_API_KEY!;
-  const jiraLink = process.env.JIRA_LINK!;
+  const jiraURL = process.env.JIRA_URL!;
 
   const bodyData = `{
     "fields": {
@@ -80,7 +79,7 @@ export async function sendTicket(
     }
 }`;
   // call jira api
-  const res = await fetch(jiraLink, {
+  const res = await fetch(jiraURL, {
     method: "POST",
     headers: {
       Authorization: `Basic ${Buffer.from(
@@ -95,6 +94,10 @@ export async function sendTicket(
       return response.json();
     })
     .then((text: { id: string; key: string; self: string }) => {
+      if (!text?.key) {
+        throw new Error();
+      }
+
       return {
         errors: undefined,
         message: `Ticket ${text.key} created successfully!`,
