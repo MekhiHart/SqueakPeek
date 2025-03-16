@@ -103,7 +103,7 @@ export async function sendTicket(
         message: `Ticket ${text.key} created successfully!`,
       };
     })
-    .catch((err) => {
+    .catch(() => {
       return {
         errors: {
           summary: [],

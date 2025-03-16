@@ -3,7 +3,7 @@ import { useAlert } from "@/lib/store/alert";
 import { Snackbar, Alert } from "@mui/material";
 
 export function AlertToast() {
-  const { alert, setOpen, isOpen, setAlert } = useAlert();
+  const { alert, setOpen, isOpen } = useAlert();
 
   function handleClose() {
     setOpen(false);

@@ -9,20 +9,17 @@ import {
   faUser,
   faChevronDown,
   faChevronUp,
-  faHeadset,
 } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { CurrentProfileAvatar } from "./CurrentProfileAvatar";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useProfile } from "@/lib/store/profile";
-import { useInterstitial } from "@/lib/store/interstitial";
 
 export function NavbarMenuDropdown() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const supabase = createSupabaseClient();
   const { profile } = useProfile();
-  const { renderInterstitial } = useInterstitial();
 
   //function to open menu
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
