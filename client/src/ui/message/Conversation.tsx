@@ -7,10 +7,8 @@ import { useState, useEffect, useMemo } from "react";
 import { useProfile } from "../../lib/store/profile";
 import { useSubscribeConversation } from "@/lib/hooks/useSubscribeConversation";
 import { createSupabaseClient } from "@/lib/supabase/client";
-
 import { notFound } from "next/navigation";
 import { updatePrivateConversationIsRead } from "@/lib/utils/updatePrivateConversationIsRead";
-import { useFetchMessage } from "@/lib/hooks/useFetchMessages";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -97,8 +95,6 @@ export function Conversation({
     };
   }, [clearConversation, conversationId]);
 
-  useFetchMessage(conversationId);
-
   return (
     <div
       style={{
@@ -116,6 +112,7 @@ export function Conversation({
         isLoading={isLoading}
         numNewMessages={numNewMessages}
         resetNumNewMessages={() => resetNumNewMessages()}
+        conversationId={conversationId}
       />
 
       {/* Message Input */}

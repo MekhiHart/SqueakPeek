@@ -1,10 +1,12 @@
 "use client";
-import { useRef, memo, useEffect } from "react";
+import { useRef, memo } from "react";
 import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MessageList } from "./MessageList";
 import { CircularProgress } from "@mui/material";
 import { MutableRefObject } from "react";
 import { useConversation } from "@/lib/store/conversation";
+import { useFetchMessage } from "@/lib/hooks/useFetchMessages";
+
 /**
  * Renders new message notifications, message list, and the message input
  * Handles the page scrolling for new messages and message input
@@ -15,17 +17,23 @@ export const ConversationBody = memo(function ConversationBody({
   numNewMessages,
   resetNumNewMessages,
   isLoading,
+  conversationId,
 }: {
   numNewMessages: number;
   resetNumNewMessages: () => void;
   isLoading: boolean;
+  conversationId: string;
 }) {
   // Scroll to the bottom of the element
   const scrollContainerRef = useRef<null | HTMLDivElement>(null);
   const topRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
-  const { incrementFetchCount } = useConversation();
+  
+  // const { incrementFetchCount } = useConversation();
+
+  useFetchMessage(conversationId);
+
   function isRefVisible(
     targetRef: MutableRefObject<HTMLDivElement | null>,
     containerRef: MutableRefObject<HTMLDivElement | null>
@@ -56,25 +64,33 @@ export const ConversationBody = memo(function ConversationBody({
     }
   }
 
-  useEffect(() => {
-    scrollContainerRef.current?.addEventListener("scroll", () => {
-      if (isRefVisible(topRef, scrollContainerRef)) {
-        incrementFetchCount();
-      }
-    });
-  }, [incrementFetchCount]);
+  /**
+   * Increments fetch count when top is visible
+   */
+  // useEffect(() => {
+  //   scrollContainerRef.current?.addEventListener("scroll", () => {
+  //     if (isRefVisible(topRef, scrollContainerRef)) {
+  //       incrementFetchCount();
+  //     }
+  //   });
+  // }, [incrementFetchCount]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      const messages = useConversation.getState().messages;
-      const jumpMessageIndex = 50;
-      if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
-        document
-          .getElementById(messages[jumpMessageIndex].messageId)
-          ?.scrollIntoView({ behavior: "instant" });
-      }
-    }
-  }, [isLoading]);
+
+/**
+ * IDEK what this does lol
+ */
+
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     const messages = useConversation.getState().messages;
+  //     const jumpMessageIndex = 50;
+  //     if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
+  //       document
+  //         .getElementById(messages[jumpMessageIndex].messageId)
+  //         ?.scrollIntoView({ behavior: "instant" });
+  //     }
+  //   }
+  // }, [isLoading]);
 
   return (
     <div
