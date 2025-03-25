@@ -44,7 +44,7 @@ export const MessageCard = memo(function MessageCard({
   // Scrolls down page when the current user sends a
   useEffect(() => {
     if (scrollDown) scrollDown();
-  });
+  }, []);
 
   const messageSenderIsCurrentUser = profile?.username === sender_username;
   const doRenderPrivateMessageModal =
