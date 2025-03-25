@@ -15,10 +15,10 @@ export async function fetchMessages(
   conversation_id: string,
   isPrivateConversation: boolean,
   fetchCount: number,
+  messageFetch: number,
   supabase: SupabaseClient = createSupabaseClient()
 ) {
   // TODO Revert numFetchMessage back to 50 after pagination feature is implemented
-  const numFetchMessage = 50; // range of message fetch for a conversation
   const fromQeury = isPrivateConversation
     ? "private_message"
     : "public_message";
@@ -41,10 +41,7 @@ export async function fetchMessages(
     )
     .eq(eqQuery, conversation_id)
     .order("created_at", { ascending: false })
-    .range(
-      numFetchMessage * fetchCount,
-      (fetchCount + 1) * numFetchMessage - 1
-    );
+    .range(messageFetch * fetchCount, (fetchCount + 1) * messageFetch - 1);
 
   const { error } = res;
   let data;

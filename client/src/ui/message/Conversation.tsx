@@ -11,6 +11,7 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { notFound } from "next/navigation";
 import { updatePrivateConversationIsRead } from "@/lib/utils/updatePrivateConversationIsRead";
 import { useFetchMessage } from "@/lib/hooks/useFetchMessages";
+import { countConversationMessages } from "@/lib/utils/countConversationMessages";
 
 /**
  * This is a UI container that holds all messages for a particular conversation
@@ -23,8 +24,13 @@ export function Conversation({
   conversationId: string;
   isPrivateConversation?: boolean;
 }) {
-  const { addMessage, clearConversation, setConversationType, isLoading } =
-    useConversation();
+  const {
+    addMessage,
+    clearConversation,
+    setConversationType,
+    isLoading,
+    setMessageTotal,
+  } = useConversation();
   const { profile } = useProfile();
   const [numNewMessages, setNumNewMessages] = useState(0); // used for rendering new message notification
   const [pageNotFound, setNotFound] = useState(false);
@@ -67,6 +73,17 @@ export function Conversation({
       if (error || !data) {
         // TODO navigate to not found page
         setNotFound(true);
+      } else {
+        countConversationMessages(
+          isPrivateConversation,
+          conversationId,
+          supabase
+        ).then((res) => {
+          const { count, error } = res;
+          if (count && !error) {
+            setMessageTotal(count);
+          }
+        });
       }
     });
   }, [profile, supabase, conversationId, isPrivateConversation]);

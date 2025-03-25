@@ -19,6 +19,7 @@ export const useFetchMessage = (
     clearConversation,
     setIsLoading,
     fetchCount,
+    messageFetch,
   } = useConversation();
   const seenMessageIds = useRef(new Set<string>());
 
@@ -28,6 +29,7 @@ export const useFetchMessage = (
       conversationId,
       useConversation.getState().isPrivateConversation,
       useConversation.getState().fetchCount,
+      messageFetch,
       supabase
     ).then((res) => {
       const { error, data } = res;

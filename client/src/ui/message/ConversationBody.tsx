@@ -25,7 +25,7 @@ export const ConversationBody = memo(function ConversationBody({
   const topRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
-  const { incrementFetchCount } = useConversation();
+  const { incrementFetchCount, messageFetch } = useConversation();
   function isRefVisible(
     targetRef: MutableRefObject<HTMLDivElement | null>,
     containerRef: MutableRefObject<HTMLDivElement | null>
@@ -59,7 +59,8 @@ export const ConversationBody = memo(function ConversationBody({
   useEffect(() => {
     scrollContainerRef.current?.addEventListener("scroll", () => {
       if (isRefVisible(topRef, scrollContainerRef)) {
-        incrementFetchCount();
+        const { messages, messageTotal } = useConversation.getState();
+        if (messages.length < messageTotal) incrementFetchCount();
       }
     });
   }, [incrementFetchCount]);
@@ -67,7 +68,9 @@ export const ConversationBody = memo(function ConversationBody({
   useEffect(() => {
     if (!isLoading) {
       const messages = useConversation.getState().messages;
-      const jumpMessageIndex = 50;
+
+      // TODO: Change this to have a 1 sour
+      const jumpMessageIndex = messageFetch;
       if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
         document
           .getElementById(messages[jumpMessageIndex].messageId)
