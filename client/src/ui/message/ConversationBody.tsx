@@ -1,11 +1,13 @@
 "use client";
-import { useRef, memo } from "react";
+import { useRef, memo, useEffect } from "react";
 import { NewMessagesNotificationModal } from "./NewMessageNotificationModal";
 import { MessageList } from "./MessageList";
 import { CircularProgress } from "@mui/material";
 import { MutableRefObject } from "react";
 import { useConversation } from "@/lib/store/conversation";
-import { useFetchMessage } from "@/lib/hooks/useFetchMessages";
+import { fetchMessages } from "@/lib/utils/fetchMessages";
+import { MessageCardProps } from "./MessageCard";
+import { createSupabaseClient } from "@/lib/supabase/client";
 
 /**
  * Renders new message notifications, message list, and the message input
@@ -29,11 +31,9 @@ export const ConversationBody = memo(function ConversationBody({
   const topRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
-  
-  // const { incrementFetchCount } = useConversation();
 
-  useFetchMessage(conversationId);
-
+  const { isPrivateConversation, setMessages, messageTotal, setMessageTotal } =
+    useConversation();
   function isRefVisible(
     targetRef: MutableRefObject<HTMLDivElement | null>,
     containerRef: MutableRefObject<HTMLDivElement | null>
@@ -66,20 +66,36 @@ export const ConversationBody = memo(function ConversationBody({
 
   /**
    * Increments fetch count when top is visible
+   * TODO Deciding if I'm gonna keep this logic
    */
-  // useEffect(() => {
-  //   scrollContainerRef.current?.addEventListener("scroll", () => {
-  //     if (isRefVisible(topRef, scrollContainerRef)) {
-  //       incrementFetchCount();
-  //     }
-  //   });
-  // }, [incrementFetchCount]);
+  useEffect(() => {
+    scrollContainerRef.current?.addEventListener("scroll", () => {
+      if (isRefVisible(topRef, scrollContainerRef)) {
+        console.log("top is being seen");
+      }
+    });
+  }, []);
 
+  useEffect(() => {
+    fetchMessages(conversationId, isPrivateConversation).then((res) => {
+      const { data } = res;
 
-/**
- * IDEK what this does lol
- */
+      const mappedData: MessageCardProps[] = data.map((message) => ({
+        message: message.message,
+        messageId: message.message_id,
+        avatar: message.sender_avatar,
+        sender_username: message.sender_username,
+        sender_id: message.sender_id,
+        timestamp: message.created_at,
+      }));
 
+      setMessages(mappedData);
+    });
+  }, []);
+
+  /**
+   * IDEK what this does lol
+   */
   // useEffect(() => {
   //   if (!isLoading) {
   //     const messages = useConversation.getState().messages;
