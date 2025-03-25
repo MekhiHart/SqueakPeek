@@ -8,6 +8,7 @@ interface MessageState {
   isPrivateConversation: boolean;
   isLoading: boolean;
   doesConversationExist: boolean;
+  fetchCount: number;
   addMessage: (newMessage: MessageCardProps) => void;
   clearConversation: () => void;
   setConversationType: (conversationType: boolean) => void;
@@ -15,6 +16,7 @@ interface MessageState {
   setIsLoading: (isLoading: boolean) => void;
   setMessageTotal: (totalCount: number) => void;
   setDoesConversationExists: (doesConversationExist: boolean) => void;
+  appendFetchCount: () => void;
 }
 
 // hook that will be access in UI components
@@ -24,6 +26,7 @@ export const useConversation = create<MessageState>()((set) => ({
   isPrivateConversation: false,
   isLoading: false,
   doesConversationExist: false,
+  fetchCount: 0,
   addMessage: (newMessage) =>
     set((state) => ({ messages: [...state.messages, newMessage] })),
   clearConversation: () => set(() => ({ messages: [], fetchCount: 0 })),
@@ -39,4 +42,7 @@ export const useConversation = create<MessageState>()((set) => ({
   },
   setDoesConversationExists: (doesConversationExist) =>
     set(() => ({ doesConversationExist })),
+
+  appendFetchCount: () =>
+    set((prevState) => ({ fetchCount: prevState.fetchCount + 1 })),
 }));

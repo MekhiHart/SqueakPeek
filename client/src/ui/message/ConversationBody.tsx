@@ -7,8 +7,6 @@ import { MutableRefObject } from "react";
 import { useConversation } from "@/lib/store/conversation";
 import { fetchMessages } from "@/lib/utils/fetchMessages";
 import { MessageCardProps } from "./MessageCard";
-import { createSupabaseClient } from "@/lib/supabase/client";
-
 /**
  * Renders new message notifications, message list, and the message input
  * Handles the page scrolling for new messages and message input
@@ -32,8 +30,14 @@ export const ConversationBody = memo(function ConversationBody({
   const bottomRef = useRef<null | HTMLDivElement>(null); // used for scrolling down the page
   const scrollThreshold = 20; // threshold for determining on whether page scrolls down on new messages
 
-  const { isPrivateConversation, setMessages, messageTotal, setMessageTotal } =
-    useConversation();
+  const {
+    isPrivateConversation,
+    setMessages,
+    messageTotal,
+    fetchCount,
+    appendFetchCount,
+    setIsLoading,
+  } = useConversation();
   function isRefVisible(
     targetRef: MutableRefObject<HTMLDivElement | null>,
     containerRef: MutableRefObject<HTMLDivElement | null>
@@ -71,42 +75,51 @@ export const ConversationBody = memo(function ConversationBody({
   useEffect(() => {
     scrollContainerRef.current?.addEventListener("scroll", () => {
       if (isRefVisible(topRef, scrollContainerRef)) {
-        console.log("top is being seen");
+        appendFetchCount();
       }
     });
   }, []);
 
   useEffect(() => {
-    fetchMessages(conversationId, isPrivateConversation).then((res) => {
-      const { data } = res;
+    setIsLoading(false);
+    fetchMessages(conversationId, isPrivateConversation, fetchCount).then(
+      (res) => {
+        const { data } = res;
+        const mappedData: MessageCardProps[] = data.map((message) => ({
+          message: message.message,
+          messageId: message.message_id,
+          avatar: message.sender_avatar,
+          sender_username: message.sender_username,
+          sender_id: message.sender_id,
+          timestamp: message.created_at,
+        }));
 
-      const mappedData: MessageCardProps[] = data.map((message) => ({
-        message: message.message,
-        messageId: message.message_id,
-        avatar: message.sender_avatar,
-        sender_username: message.sender_username,
-        sender_id: message.sender_id,
-        timestamp: message.created_at,
-      }));
-
-      setMessages(mappedData);
-    });
-  }, []);
+        setMessages(mappedData);
+        setIsLoading(true);
+      }
+    );
+  }, [
+    fetchMessages,
+    conversationId,
+    isPrivateConversation,
+    setMessages,
+    fetchCount,
+  ]);
 
   /**
    * IDEK what this does lol
    */
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     const messages = useConversation.getState().messages;
-  //     const jumpMessageIndex = 50;
-  //     if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
-  //       document
-  //         .getElementById(messages[jumpMessageIndex].messageId)
-  //         ?.scrollIntoView({ behavior: "instant" });
-  //     }
-  //   }
-  // }, [isLoading]);
+  useEffect(() => {
+    if (!isLoading) {
+      const messages = useConversation.getState().messages;
+      const jumpMessageIndex = 50;
+      if (messages.length > jumpMessageIndex && messages[jumpMessageIndex]) {
+        document
+          .getElementById(messages[jumpMessageIndex].messageId)
+          ?.scrollIntoView({ behavior: "instant" });
+      }
+    }
+  }, [isLoading]);
 
   return (
     <div
